@@ -1,5 +1,8 @@
 # plycut
 
+needs python3 
+
+
 ```
 usage: plycut.py [-h] [-o O] [--min MIN MIN MIN] [--max MAX MAX MAX] [--center CENTER CENTER CENTER] [--random RANDOM] src
 
