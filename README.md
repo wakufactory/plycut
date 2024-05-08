@@ -1,7 +1,19 @@
 # plycut
 
+crop point cloud .ply data.
+
 needs python3 
 
+## Example
+
+```
+./plycut.py src.ply -o out.ply --min -1 -1 -1 --max 1 1 1 
+
+```
+crop (-1,-1,-1)-(1,1,1)
+
+
+## usage
 
 ```
 usage: plycut.py [-h] [-o O] [--min MIN MIN MIN] [--max MAX MAX MAX] [--center CENTER CENTER CENTER] [--random RANDOM] src
