@@ -35,6 +35,12 @@ for idx, l in enumerate(heads[0:-1]):
 		if type=="float": 
 			pack += "f" 
 			hs += 4 
+		if type=="double": 
+			pack += "d" 
+			hs += 8
+		if type=="uchar": 
+			pack += "B" 
+			hs += 1 
 	elif re.search('^element vertex ',l):
 		evidx = idx
 print(f'Loading {args.src}')
@@ -70,10 +76,10 @@ while True:
 		y -= args.center[0]
 		z -= args.center[0]
 
-	if args.scale != None:
-		x *= args.scale 
-		y *= args.scale 
-		z *= args.scale 
+#	if args.scale != None:
+#		x *= args.scale 
+#		y *= args.scale 
+#		z *= args.scale 
 #		prop[hn.index('scale_0')] *= args.scale 
 #		prop[hn.index('scale_1')] *= args.scale 
 #		prop[hn.index('scale_2')] *= args.scale 
