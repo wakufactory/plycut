@@ -4,6 +4,8 @@ import sys
 import random
 import re
 import argparse
+import math
+
 parser = argparse.ArgumentParser()
 parser.add_argument("src", help="ply file")
 parser.add_argument("-o", help="dest file")
@@ -11,6 +13,7 @@ parser.add_argument("--min",nargs=3,type=float,help="min axis")
 parser.add_argument("--max",nargs=3,type=float,help="max axis")
 parser.add_argument("--center",nargs=3,type=float,help="center axis")
 #parser.add_argument("--scale",type=float,default=1,help="scale")
+parser.add_argument("--rot",type=float,default=0,help="rotation Y")
 parser.add_argument("--random",type=float,default=1,help="mabiki")
 args = parser.parse_args()
 #print(args) 
@@ -63,27 +66,44 @@ while True:
 	y = prop[hn.index('y')]
 	z = prop[hn.index('z')]
 #	print(prop[hn.index('scale_0')],prop[hn.index('scale_1')],prop[hn.index('scale_2')])
+
+	if args.rot != 0:
+		rad = math.radians(args.rot)
+		xx = x * math.cos(rad) + z * math.sin(rad)
+		z = x * -math.sin(rad) + z * math.cos(rad) 
+		x = xx 
+		# qwpx - qypz, qwpy + qypw, qypx + qwpz, -qypy + qwpw 
+		qy = -math.sin(rad/2) 
+		qw = math.cos(rad/2)  
+		px = prop[hn.index('rot_0')]
+		py = prop[hn.index('rot_1')]
+		pz = prop[hn.index('rot_2')]
+		pw = prop[hn.index('rot_3')]
+		prop[hn.index('rot_0')] = qw*px - qy*pz
+		prop[hn.index('rot_1')] = qw*py + qy*pw
+		prop[hn.index('rot_2')] = qy*px + qw*pz
+		prop[hn.index('rot_3')] = -qy*py + qw*pw 
+
+	if args.center != None:
+		x -= args.center[0]
+		y -= args.center[1]
+		z -= args.center[2]
+		
+		#	if args.scale != None:
+		#		x *= args.scale 
+		#		y *= args.scale 
+		#		z *= args.scale 
+		#		prop[hn.index('scale_0')] *= args.scale 
+		#		prop[hn.index('scale_1')] *= args.scale 
+		#		prop[hn.index('scale_2')] *= args.scale 
+
 	
 	if args.min != None:
 		if(x<args.min[0] or  y<args.min[1]  or  z<args.min[2]  ): continue ;
 	if args.max != None:
 		if(x>args.max[0] or  y>args.max[1]  or  z>args.max[2]  ): continue ;
 	if args.random!=1 and random.random()>args.random : continue ;
-
-	
-	if args.center != None:
-		x -= args.center[0]
-		y -= args.center[0]
-		z -= args.center[0]
-
-#	if args.scale != None:
-#		x *= args.scale 
-#		y *= args.scale 
-#		z *= args.scale 
-#		prop[hn.index('scale_0')] *= args.scale 
-#		prop[hn.index('scale_1')] *= args.scale 
-#		prop[hn.index('scale_2')] *= args.scale 
-
+		
 	if sx > x : sx = x 
 	if sy > y : sy = y 
 	if sz > z : sz = z 
